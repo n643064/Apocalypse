@@ -1,5 +1,6 @@
 package n643064.apocalypse.core.entity.goal;
 
+import n643064.apocalypse.Apocalypse;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
@@ -25,6 +26,10 @@ public class ZombiePounceAtTargetGoal extends Goal
     @Override
     public boolean canStart()
     {
+        if (this.mob.getDataTracker().get(Apocalypse.IS_DIGGING))
+        {
+            return false;
+        }
         this.target = this.mob.getTarget();
         if (this.target == null)
         {

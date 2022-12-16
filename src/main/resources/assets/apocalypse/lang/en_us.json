@@ -1,0 +1,17 @@
+{
+  "text.autoconfig.apocalypse.title": "Apocalypse Config",
+  "text.autoconfig.apocalypse.option.horde": "Horde Spawner Settings",
+  "text.autoconfig.apocalypse.option.horde.enabled": "Enable horde Spawning",
+  "text.autoconfig.apocalypse.option.horde.cooldownMin": "Minimal horde Cooldown (sec)",
+  "text.autoconfig.apocalypse.option.horde.cooldownMax": "Maximal horde Cooldown (sec)",
+  "text.autoconfig.apocalypse.option.horde.distanceMin": "Minimal horde distance from the player",
+  "text.autoconfig.apocalypse.option.horde.distanceMax": "Maximal horde distance from the player",
+  "text.autoconfig.apocalypse.option.horde.ZombieAmountMin": "Minimal amount of zombies that can spawn",
+  "text.autoconfig.apocalypse.option.horde.ZombieAmountMax": "Maximal amount of zombies that can spawn",
+  "text.autoconfig.apocalypse.option.horde.PersistentZombies": "Spawned zombies are persistent (don't despawn)",
+  "text.autoconfig.apocalypse.option.horde.bypassGameRule": "Ignore 'doMobSpawning' gamerule",
+
+  "text.autoconfig.apocalypse.option.zombie": "Zombie Settings",
+  "text.autoconfig.apocalypse.option.zombie.attackSpeed": "The speed at which zombies chase their targets",
+  "text.autoconfig.apocalypse.option.zombie.pounceVelocity": "The velocity of zombies' pounce (horizontal jump) attack"
+}

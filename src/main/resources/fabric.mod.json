@@ -3,7 +3,7 @@
   "id": "apocalypse",
   "version": "${version}",
   "name": "Apocalypse",
-  "description": "Changes the behavior of zombies to be more aggressive and dangerous, and adds apocalypse themed structures ",
+  "description": "This mod significantly buffs zombies and allows them to break blocks, fully configurable via Cloth Config",
   "authors": [
     "n643064"
   ],
@@ -17,6 +17,9 @@
     ],
     "main": [
       "n643064.apocalypse.Apocalypse"
+    ],
+    "modmenu": [
+      "n643064.apocalypse.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -25,6 +28,6 @@
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric": "*",
-    "minecraft": "1.19.2"
+    "minecraft": "1.19.*"
   }
 }

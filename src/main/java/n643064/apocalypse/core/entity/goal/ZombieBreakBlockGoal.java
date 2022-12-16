@@ -3,16 +3,15 @@ package n643064.apocalypse.core.entity.goal;
 import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.WorldUtil;
 import net.minecraft.block.AirBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.DoorBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.ai.pathing.PathNode;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ZombieBreakBlockGoal extends Goal
@@ -21,6 +20,7 @@ public class ZombieBreakBlockGoal extends Goal
     private BlockPos target;
     private float targetHardness;
     private float progress;
+    private float ratio;
     public ZombieBreakBlockGoal(ZombieEntity mob)
     {
         this.mob = mob;
@@ -35,30 +35,34 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public boolean shouldContinue()
     {
-        return mob.getNavigation().isIdle() && WorldUtil.distanceToBLock(mob, target) <= 3 && this.progress < this.targetHardness;
+
+        return WorldUtil.blockPosDistance(mob, target) <= 3 && this.progress <= this.targetHardness;
     }
 
     @Override
     public void start()
     {
-        System.out.println("Start");
         mob.getDataTracker().set(Apocalypse.IS_DIGGING, true);
     }
 
 
     @Override
+    public boolean canStop()
+    {
+        return false;
+    }
+
+    @Override
     public void tick()
     {
         progress += 0.05;
-        System.out.println(progress);
         mob.swingHand(Hand.MAIN_HAND);
         if (progress >= targetHardness)
         {
             mob.world.breakBlock(this.target, true);
-            System.out.println("Break");
             return;
         }
-        mob.world.setBlockBreakingInfo(mob.getId(), target, (int) (progress * 4));
+        mob.world.setBlockBreakingInfo(mob.getId(), target, (int) (progress * ratio));
 
     }
 
@@ -76,11 +80,20 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public boolean canStart()
     {
-        if (!mob.getNavigation().isIdle()) return false;
+
         World world = mob.world;
         Direction direction = mob.getHorizontalFacing();
-        BlockPos pos = mob.getBlockPos().add(direction.getVector()).add(0, 1, 0);
+        BlockPos pos = mob.getBlockPos();
+        Block b = world.getBlockState(pos).getBlock();
+        if (b instanceof DoorBlock && !b.equals(Blocks.IRON_DOOR))
+        {
+            world.breakBlock(pos, true);
+            return false;
+        }
+        pos = pos.add(direction.getVector()).add(0, 1, 0);
         LivingEntity targetEntity = mob.getTarget();
+
+        if (!mob.getNavigation().isIdle()) return false;
         if (targetEntity == null) return false;
         int yDiff = Math.abs(targetEntity.getBlockY() - mob.getBlockY());
         int mod;
@@ -91,20 +104,21 @@ public class ZombieBreakBlockGoal extends Goal
         {
             mod = -1;
         }
-        if (world.getBlockState(pos).getBlock() instanceof AirBlock)
+        Block block = world.getBlockState(pos).getBlock();
+
+        if (block instanceof AirBlock || (block instanceof DoorBlock && !block.equals(Blocks.IRON_DOOR)) || block.canMobSpawnInside())
         {
             pos = pos.add(0, mod, 0);
-            if (world.getBlockState(pos).getBlock() instanceof AirBlock)
+            block = world.getBlockState(pos).getBlock();
+            if (block instanceof AirBlock || (block instanceof DoorBlock && !block.equals(Blocks.IRON_DOOR)) || block.canMobSpawnInside())
             {
                 return false;
             }
-            target = pos;
 
-        } else
-        {
-            target = pos;
         }
+        target = pos;
         targetHardness = world.getBlockState(target).getBlock().getHardness() * 2;
+        ratio = 10 / targetHardness;
         return targetHardness < 20;
     }
 }

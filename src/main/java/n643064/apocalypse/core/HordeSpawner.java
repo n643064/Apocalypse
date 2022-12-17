@@ -69,7 +69,7 @@ public class HordeSpawner implements Spawner
                         }
                         world.spawnEntity(e);
                     }
-                    player.sendMessage(Text.of("A horde has spawned! Cooldown: " + this.cooldown));
+                    player.sendMessage(Text.of("A horde has spawned!"));
                 }
             }
         }

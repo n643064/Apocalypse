@@ -3,20 +3,15 @@ package n643064.apocalypse;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.gui.registry.DefaultGuiRegistryAccess;
-import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.registry.Registry;
 
 public class Apocalypse implements ModInitializer
 {
@@ -58,8 +53,33 @@ public class Apocalypse implements ModInitializer
         public static class Zombie
         {
            public float attackSpeed = 1.5f;
+           public boolean enablePounce = true;
            public float pounceVelocity = 0.2f;
+           public boolean revengeEnabled = true;
+           public boolean groupRevengeEnabled = true;
+           public int revengePriority = 1;
+           public String[] targets = new String[]{
+                   "minecraft:player,2,false,false",
+                   "minecraft:wandering_trader,3,false,false",
+                   "minecraft:iron_golem,3,false,false",
+                   "minecraft:turtle,5,false,false",
+                   "minecraft:sheep,6,false,false",
+                   "minecraft:cow,6,false,false",
+                   "minecraft:pig,6,false,false",
+                   "minecraft:polar_bear,12,false,false",
+                   "minecraft:horse,8,false,false",
+                   "minecraft:mule,8,false,false",
+                   "minecraft:donkey,8,false,false",
+                   "minecraft:wolf,8,false,false",
+                   "minecraft:dolphin,12,false,false"
+           };
+           public boolean enableDigging = true;
+           public float diggingProgressTick = 0.05f;
+           public int maximumTargetHardness = 20;
+
+
         }
+
     }
 
 

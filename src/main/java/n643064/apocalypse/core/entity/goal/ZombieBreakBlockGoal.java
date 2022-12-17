@@ -1,5 +1,6 @@
 package n643064.apocalypse.core.entity.goal;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.WorldUtil;
 import net.minecraft.block.AirBlock;
@@ -55,7 +56,8 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public void tick()
     {
-        progress += 0.05;
+        Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
+        progress += config.diggingProgressTick;
         mob.swingHand(Hand.MAIN_HAND);
         if (progress >= targetHardness)
         {
@@ -80,6 +82,7 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public boolean canStart()
     {
+        Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
 
         World world = mob.world;
         Direction direction = mob.getHorizontalFacing();
@@ -119,6 +122,6 @@ public class ZombieBreakBlockGoal extends Goal
         target = pos;
         targetHardness = world.getBlockState(target).getBlock().getHardness() * 2;
         ratio = 10 / targetHardness;
-        return targetHardness < 20;
+        return targetHardness < config.maximumTargetHardness;
     }
 }

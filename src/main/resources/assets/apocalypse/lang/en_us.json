@@ -8,10 +8,19 @@
   "text.autoconfig.apocalypse.option.horde.distanceMax": "Maximal horde distance from the player",
   "text.autoconfig.apocalypse.option.horde.ZombieAmountMin": "Minimal amount of zombies that can spawn",
   "text.autoconfig.apocalypse.option.horde.ZombieAmountMax": "Maximal amount of zombies that can spawn",
-  "text.autoconfig.apocalypse.option.horde.PersistentZombies": "Spawned zombies are persistent (don't despawn)",
+  "text.autoconfig.apocalypse.option.horde.PersistentZombies": "Spawned zombies are persistent",
   "text.autoconfig.apocalypse.option.horde.bypassGameRule": "Ignore 'doMobSpawning' gamerule",
 
   "text.autoconfig.apocalypse.option.zombie": "Zombie Settings",
-  "text.autoconfig.apocalypse.option.zombie.attackSpeed": "The speed at which zombies chase their targets",
-  "text.autoconfig.apocalypse.option.zombie.pounceVelocity": "The velocity of zombies' pounce (horizontal jump) attack"
+  "text.autoconfig.apocalypse.option.zombie.attackSpeed": "Attack (movement) speed",
+  "text.autoconfig.apocalypse.option.zombie.enablePounce": "Enable pounce attack",
+  "text.autoconfig.apocalypse.option.zombie.pounceVelocity": "Pounce attack velocity",
+  "text.autoconfig.apocalypse.option.zombie.checkVisibility": "Check for target visibility",
+  "text.autoconfig.apocalypse.option.zombie.revengeEnabled": "Enable revenge goal",
+  "text.autoconfig.apocalypse.option.zombie.groupRevengeEnabled": "Enable revenge as a group",
+  "text.autoconfig.apocalypse.option.zombie.revengePriority": "Revenge goal priority",
+  "text.autoconfig.apocalypse.option.zombie.targets": "Targeted entities",
+  "text.autoconfig.apocalypse.option.zombie.enableDigging": "Enable zombies breaking blocks",
+  "text.autoconfig.apocalypse.option.zombie.diggingProgressTick": "Breaking progress per tick",
+  "text.autoconfig.apocalypse.option.zombie.maximumTargetHardness": "The maximum hardness of blocks that zombies can break "
 }

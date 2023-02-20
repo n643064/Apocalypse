@@ -7,7 +7,6 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -16,14 +15,12 @@ import net.minecraft.entity.mob.ZombieEntity;
 public class Apocalypse implements ModInitializer
 {
     public static final String MODID = "apocalypse";
-    public static MinecraftClient MC;
     public static TrackedData<Boolean> IS_DIGGING;
     @Override
     public void onInitialize()
     {
         AutoConfig.register(ApocalypseConfig.class, GsonConfigSerializer::new);
         IS_DIGGING = DataTracker.registerData(ZombieEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        MC = MinecraftClient.getInstance();
     }
 
 

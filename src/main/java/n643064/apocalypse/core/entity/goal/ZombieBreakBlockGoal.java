@@ -79,20 +79,33 @@ public class ZombieBreakBlockGoal extends Goal
         mob.getNavigation().recalculatePath();
     }
 
+
+
     @Override
     public boolean canStart()
     {
-        Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
-
-        World world = mob.world;
-        Direction direction = mob.getHorizontalFacing();
+        final Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
+        final World world = mob.world;
+        final Direction direction = mob.getHorizontalFacing();
         BlockPos pos = mob.getBlockPos();
         Block b = world.getBlockState(pos).getBlock();
-        if (b instanceof DoorBlock && !b.equals(Blocks.IRON_DOOR))
+
+        if (config.instantDoorBreak)
         {
-            world.breakBlock(pos, true);
-            return false;
+            if (b instanceof DoorBlock && b.getHardness() < 5)
+            {
+                world.breakBlock(pos, true);
+                return false;
+            }
+            BlockPos pos2 = pos.add(direction.getVector());
+            Block b2 = world.getBlockState(pos2).getBlock();
+            if (b2 instanceof DoorBlock && b2.getHardness() < 5)
+            {
+                world.breakBlock(pos2, true);
+                return false;
+            }
         }
+
         pos = pos.add(direction.getVector()).add(0, 1, 0);
         LivingEntity targetEntity = mob.getTarget();
 
@@ -107,20 +120,23 @@ public class ZombieBreakBlockGoal extends Goal
         {
             mod = -1;
         }
-        Block block = world.getBlockState(pos).getBlock();
+        b = world.getBlockState(pos).getBlock();
 
-        if (block instanceof AirBlock || (block instanceof DoorBlock && !block.equals(Blocks.IRON_DOOR)) || block.canMobSpawnInside())
+        if (b instanceof AirBlock || b.canMobSpawnInside())
         {
             pos = pos.add(0, mod, 0);
-            block = world.getBlockState(pos).getBlock();
-            if (block instanceof AirBlock || (block instanceof DoorBlock && !block.equals(Blocks.IRON_DOOR)) || block.canMobSpawnInside())
+            b = world.getBlockState(pos).getBlock();
+            if (b instanceof AirBlock || b.canMobSpawnInside())
             {
                 return false;
             }
-
         }
         target = pos;
         targetHardness = world.getBlockState(target).getBlock().getHardness() * 2;
+        if (targetHardness < 0)
+        {
+            return false;
+        }
         ratio = 10 / targetHardness;
         return targetHardness < config.maximumTargetHardness;
     }

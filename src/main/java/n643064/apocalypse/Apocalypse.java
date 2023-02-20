@@ -40,18 +40,18 @@ public class Apocalypse implements ModInitializer
             public boolean enabled = true;
             public int cooldownMin = 300; // 5 minutes
             public int cooldownMax = 600; // 10 minutes
-            public int distanceMin = 128; // 8 chunks
-            public int distanceMax = 256; // 16 chunks
+            public int distanceMin = 64; // 4 chunks
+            public int distanceMax = 128; // 8 chunks
             public int ZombieAmountMin = 8;
             public int ZombieAmountMax = 16;
             public boolean PersistentZombies = true;
-            public boolean bypassGameRule = false;
         }
         public static class Zombie
         {
            public float attackSpeed = 1.5f;
            public boolean enablePounce = true;
            public float pounceVelocity = 0.2f;
+           public int pouncePriority = 14;
            public boolean revengeEnabled = true;
            public boolean groupRevengeEnabled = true;
            public int revengePriority = 1;
@@ -71,6 +71,7 @@ public class Apocalypse implements ModInitializer
                    "minecraft:dolphin,12,false,false"
            };
            public boolean enableDigging = true;
+           public boolean instantDoorBreak = true;
            public float diggingProgressTick = 0.05f;
            public int maximumTargetHardness = 20;
 

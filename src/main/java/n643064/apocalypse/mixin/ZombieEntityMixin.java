@@ -2,7 +2,6 @@ package n643064.apocalypse.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import n643064.apocalypse.Apocalypse;
-import n643064.apocalypse.core.EntityTypeInterface;
 import n643064.apocalypse.core.entity.goal.PrioritizedZombieBreakBlockGoal;
 import n643064.apocalypse.core.entity.goal.ZombiePounceAtTargetGoal;
 import net.minecraft.entity.Entity;
@@ -14,16 +13,14 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -55,7 +52,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
         {
             if (config.groupRevengeEnabled)
             {
-                this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)).setGroupRevenge(ZombifiedPiglinEntity.class));
+                this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)).setGroupRevenge(ZombieEntity.class));
             } else
             {
                 this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)));
@@ -64,7 +61,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
 
         if (config.enablePounce)
         {
-            this.goalSelector.add(14, new ZombiePounceAtTargetGoal(instance, config.pounceVelocity));
+            this.goalSelector.add(config.pouncePriority, new ZombiePounceAtTargetGoal(instance, config.pounceVelocity));
         }
 
         for (String s : config.targets)
@@ -82,7 +79,9 @@ public abstract class ZombieEntityMixin extends HostileEntity
                 {
                     continue;
                 }
-                clazz = Objects.requireNonNull(optionalEntityType.get().create(world)).getClass();
+                Entity tmp = optionalEntityType.get().create(world);
+                clazz = Objects.requireNonNull(tmp).getClass();
+                tmp.remove(RemovalReason.DISCARDED);
                 if (!LivingEntity.class.isAssignableFrom(clazz))
                 {
                     continue;
@@ -90,7 +89,8 @@ public abstract class ZombieEntityMixin extends HostileEntity
             }
             int priority = Integer.parseInt(strings[1]);
             boolean vis = Boolean.parseBoolean(strings[2]);
-            boolean nav = Boolean.parseBoolean(strings[3]);this.targetSelector.add(priority, new ActiveTargetGoal<>(instance, (Class<LivingEntity>) clazz, vis, nav));
+            boolean nav = Boolean.parseBoolean(strings[3]);
+            this.targetSelector.add(priority, new ActiveTargetGoal<>(instance, (Class<LivingEntity>) clazz, vis, nav));
         }
 
         ((MobNavigation) instance.getNavigation()).setAvoidSunlight(false);
@@ -103,20 +103,25 @@ public abstract class ZombieEntityMixin extends HostileEntity
         }
 
     }
-    
-    @Inject(method = "burnsInDaylight", at = @At("HEAD"), cancellable = true)
-    private void burnsInDaylight(CallbackInfoReturnable<Boolean> cir)
+
+    /**
+     * @author me
+     * @reason yes
+     */
+    @Overwrite
+    public boolean burnsInDaylight()
     {
-        cir.setReturnValue(false);
+        return false;
     }
 
-    @Inject(method = "canBreakDoors", at = @At("TAIL"), cancellable = true)
-    private void canBreakDoors(CallbackInfoReturnable<Boolean> cir)
+    /**
+     * @author me
+     * @reason yes
+     */
+    @Overwrite
+    public boolean canBreakDoors()
     {
-        cir.setReturnValue(true);
+        return false;
     }
-
-
-
 
 }

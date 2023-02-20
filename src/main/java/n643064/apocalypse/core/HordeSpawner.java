@@ -25,11 +25,6 @@ public class HordeSpawner implements Spawner
         {
             return 0;
         }
-
-        if (!world.getGameRules().get(GameRules.DO_MOB_SPAWNING).get() && !horde.bypassGameRule)
-        {
-            return 0;
-        }
         Random random = world.random;
         --this.cooldown;
         if (this.cooldown > 0)
@@ -58,11 +53,11 @@ public class HordeSpawner implements Spawner
                         z = z * -1;
                     }
                     BlockPos pos = player.getBlockPos().add(x, 0, z);
-                    pos = new BlockPos(pos.getX(), world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()), pos.getZ());
+                    pos = new BlockPos(pos.getX(), world.getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ()), pos.getZ());
                     for (int i = 0; i < random.nextBetween(horde.ZombieAmountMin, horde.ZombieAmountMax); i++)
                     {
                         ZombieEntity e = new ZombieEntity(world);
-                        e.setPosition(pos.getX(), pos.getY() + random.nextInt(8), pos.getZ() + random.nextInt(8));
+                        e.setPosition(pos.getX(), pos.getY() + random.nextInt(3), pos.getZ() + random.nextInt(8));
                         if (horde.PersistentZombies)
                         {
                             e.setPersistent();

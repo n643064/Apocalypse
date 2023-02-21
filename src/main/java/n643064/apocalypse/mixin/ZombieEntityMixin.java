@@ -11,7 +11,6 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.MobNavigation;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
@@ -30,7 +29,6 @@ import static n643064.apocalypse.Apocalypse.IS_DIGGING;
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity
 {
-    private EntityType<?> t;
 
     @Shadow @Final protected abstract void initGoals();
 
@@ -41,6 +39,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
         super(entityType, world);
     }
 
+    @SuppressWarnings("unchecked")
     @Redirect(method = "initGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;initCustomGoals()V"))
     private void initCustomGoals(ZombieEntity instance)
     {
@@ -52,7 +51,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
         {
             if (config.groupRevengeEnabled)
             {
-                this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)).setGroupRevenge(ZombieEntity.class));
+                this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)).setGroupRevenge());
             } else
             {
                 this.targetSelector.add(config.revengePriority, (new RevengeGoal(this)));

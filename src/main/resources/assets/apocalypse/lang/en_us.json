@@ -14,6 +14,8 @@
   "text.autoconfig.apocalypse.option.zombie": "Zombie Settings",
   "text.autoconfig.apocalypse.option.zombie.attackSpeed": "Attack (movement) speed",
   "text.autoconfig.apocalypse.option.zombie.burnsInDaylight": "Enable zombies burning in daylight",
+  "text.autoconfig.apocalypse.option.zombie.avoidSunlight": "Enable avoiding sunlight during pathfinding",
+  "text.autoconfig.apocalypse.option.zombie.pathThroughDoors": "Allow pathfinding through doors",
   "text.autoconfig.apocalypse.option.zombie.enablePounce": "Enable pounce attack",
   "text.autoconfig.apocalypse.option.zombie.pounceVelocity": "Pounce attack velocity",
   "text.autoconfig.apocalypse.option.zombie.pouncePriority": "Pounce goal priority",

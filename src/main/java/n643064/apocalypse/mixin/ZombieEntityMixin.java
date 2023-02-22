@@ -1,6 +1,5 @@
 package n643064.apocalypse.mixin;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.entity.goal.PrioritizedZombieBreakBlockGoal;
 import n643064.apocalypse.core.entity.goal.ZombiePounceAtTargetGoal;
@@ -29,7 +28,7 @@ import static n643064.apocalypse.Apocalypse.IS_DIGGING;
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity
 {
-    private Apocalypse.ApocalypseConfig.Zombie config;
+
     @Shadow @Final protected abstract void initGoals();
 
     @Shadow @Final public abstract boolean onKilledOther(ServerWorld world, LivingEntity other);
@@ -43,7 +42,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
     @Redirect(method = "initGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;initCustomGoals()V"))
     private void initCustomGoals(ZombieEntity instance)
     {
-        config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
+        Apocalypse.ApocalypseConfig.Zombie config = Apocalypse.config.zombie;
         this.goalSelector.add(2, new ZombieAttackGoal(instance, config.attackSpeed, false));
         this.goalSelector.add(6, new MoveThroughVillageGoal(instance, 1.0, false, 4, instance::canBreakDoors));
         this.goalSelector.add(7, new WanderAroundFarGoal(instance, 1.0));
@@ -92,15 +91,14 @@ public abstract class ZombieEntityMixin extends HostileEntity
             this.targetSelector.add(priority, new ActiveTargetGoal<>(instance, (Class<LivingEntity>) clazz, vis, nav));
         }
 
-        ((MobNavigation) instance.getNavigation()).setAvoidSunlight(false);
-        ((MobNavigation) instance.getNavigation()).setCanPathThroughDoors(true);
+        ((MobNavigation) instance.getNavigation()).setAvoidSunlight(config.avoidSunlight);
+        ((MobNavigation) instance.getNavigation()).setCanPathThroughDoors(config.pathThroughDoors);
 
         this.dataTracker.startTracking(IS_DIGGING, false);
         if (config.enableDigging)
         {
             this.goalSelector.add(config.blockBreakPriority, new PrioritizedZombieBreakBlockGoal(config.blockBreakPriority, instance));
         }
-
     }
 
     /**
@@ -110,7 +108,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
     @Overwrite
     public boolean burnsInDaylight()
     {
-        return config.burnsInDaylight;
+        return Apocalypse.config.zombie.burnsInDaylight;
     }
 
     /**

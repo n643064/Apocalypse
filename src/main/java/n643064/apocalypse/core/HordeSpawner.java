@@ -1,6 +1,5 @@
 package n643064.apocalypse.core;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import n643064.apocalypse.Apocalypse;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,19 +7,16 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.spawner.Spawner;
 
 public class HordeSpawner implements Spawner
 {
-
-
     private int cooldown;
     @Override
     public int spawn(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals)
     {
-        Apocalypse.ApocalypseConfig.Horde horde = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).getConfig().horde;
+        Apocalypse.ApocalypseConfig.Horde horde = Apocalypse.config.horde;
         if (!spawnMonsters || !horde.enabled)
         {
             return 0;

@@ -5,22 +5,33 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import n643064.apocalypse.core.util.ConfigSavedEvent;
+import n643064.apocalypse.core.util.CustomGsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.util.ActionResult;
 
 public class Apocalypse implements ModInitializer
 {
     public static final String MODID = "apocalypse";
     public static TrackedData<Boolean> IS_DIGGING;
+    public static ApocalypseConfig config;
+
     @Override
     public void onInitialize()
     {
-        AutoConfig.register(ApocalypseConfig.class, GsonConfigSerializer::new);
+        AutoConfig.register(ApocalypseConfig.class, CustomGsonConfigSerializer::new);
         IS_DIGGING = DataTracker.registerData(ZombieEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
+        ConfigSavedEvent.EVENT.register(() ->
+        {
+            config = AutoConfig.getConfigHolder(ApocalypseConfig.class).get();
+            return ActionResult.PASS;
+        });
+        ConfigSavedEvent.EVENT.invoker().call();
     }
 
 
@@ -49,7 +60,9 @@ public class Apocalypse implements ModInitializer
         public static class Zombie
         {
            public float attackSpeed = 1.5f;
-           public boolean burnsInDaylight = true;
+           public boolean burnsInDaylight = false;
+           public boolean avoidSunlight = false;
+           public boolean pathThroughDoors = true;
            public boolean enablePounce = true;
            public float pounceVelocity = 0.2f;
            public int pouncePriority = 14;

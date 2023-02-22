@@ -13,6 +13,7 @@
 
   "text.autoconfig.apocalypse.option.zombie": "Zombie Settings",
   "text.autoconfig.apocalypse.option.zombie.attackSpeed": "Attack (movement) speed",
+  "text.autoconfig.apocalypse.option.zombie.burnsInDaylight": "Enable zombies burning in daylight",
   "text.autoconfig.apocalypse.option.zombie.enablePounce": "Enable pounce attack",
   "text.autoconfig.apocalypse.option.zombie.pounceVelocity": "Pounce attack velocity",
   "text.autoconfig.apocalypse.option.zombie.pouncePriority": "Pounce goal priority",
@@ -22,7 +23,10 @@
   "text.autoconfig.apocalypse.option.zombie.revengePriority": "Revenge goal priority",
   "text.autoconfig.apocalypse.option.zombie.targets": "Targeted entities",
   "text.autoconfig.apocalypse.option.zombie.enableDigging": "Enable zombies breaking blocks",
+  "text.autoconfig.apocalypse.option.zombie.blockBreakPriority": "Block break goal priority",
+  "text.autoconfig.apocalypse.option.zombie.dropBrokenBlocks": "Drop blocks broken by zombies",
   "text.autoconfig.apocalypse.option.zombie.instantDoorBreak": "Enable zombies instantly breaking doors",
+  "text.autoconfig.apocalypse.option.zombie.instantDoorBreakHardness": "Maximal hardness of instantly broken doors",
   "text.autoconfig.apocalypse.option.zombie.diggingProgressTick": "Breaking progress per tick",
   "text.autoconfig.apocalypse.option.zombie.maximumTargetHardness": "Maximal target block hardness"
 }

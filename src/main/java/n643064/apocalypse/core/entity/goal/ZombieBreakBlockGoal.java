@@ -5,7 +5,6 @@ import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.WorldUtil;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -18,6 +17,7 @@ import net.minecraft.world.World;
 public class ZombieBreakBlockGoal extends Goal
 {
     private final ZombieEntity mob;
+    private Apocalypse.ApocalypseConfig.Zombie config;
     private BlockPos target;
     private float targetHardness;
     private float progress;
@@ -36,7 +36,6 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public boolean shouldContinue()
     {
-
         return WorldUtil.blockPosDistance(mob, target) <= 3 && this.progress <= this.targetHardness;
     }
 
@@ -56,12 +55,12 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public void tick()
     {
-        Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
+       //Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
         progress += config.diggingProgressTick;
         mob.swingHand(Hand.MAIN_HAND);
         if (progress >= targetHardness)
         {
-            mob.world.breakBlock(this.target, true);
+            mob.world.breakBlock(this.target, config.dropBrokenBlocks);
             return;
         }
         mob.world.setBlockBreakingInfo(mob.getId(), target, (int) (progress * ratio));
@@ -84,7 +83,7 @@ public class ZombieBreakBlockGoal extends Goal
     @Override
     public boolean canStart()
     {
-        final Apocalypse.ApocalypseConfig.Zombie config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
+        config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
         final World world = mob.world;
         final Direction direction = mob.getHorizontalFacing();
         BlockPos pos = mob.getBlockPos();
@@ -92,16 +91,16 @@ public class ZombieBreakBlockGoal extends Goal
 
         if (config.instantDoorBreak)
         {
-            if (b instanceof DoorBlock && b.getHardness() < 5)
+            if (b instanceof DoorBlock && b.getHardness() < config.instantDoorBreakHardness)
             {
-                world.breakBlock(pos, true);
+                world.breakBlock(pos, config.dropBrokenBlocks);
                 return false;
             }
             BlockPos pos2 = pos.add(direction.getVector());
             Block b2 = world.getBlockState(pos2).getBlock();
-            if (b2 instanceof DoorBlock && b2.getHardness() < 5)
+            if (b2 instanceof DoorBlock && b2.getHardness() < config.instantDoorBreakHardness)
             {
-                world.breakBlock(pos2, true);
+                world.breakBlock(pos2, config.dropBrokenBlocks);
                 return false;
             }
         }

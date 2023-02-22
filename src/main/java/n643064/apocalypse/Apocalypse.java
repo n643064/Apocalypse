@@ -49,6 +49,7 @@ public class Apocalypse implements ModInitializer
         public static class Zombie
         {
            public float attackSpeed = 1.5f;
+           public boolean burnsInDaylight = true;
            public boolean enablePounce = true;
            public float pounceVelocity = 0.2f;
            public int pouncePriority = 14;
@@ -71,7 +72,10 @@ public class Apocalypse implements ModInitializer
                    "minecraft:dolphin,12,false,false"
            };
            public boolean enableDigging = true;
+           public int blockBreakPriority = 2;
+           public boolean dropBrokenBlocks = true;
            public boolean instantDoorBreak = true;
+           public float instantDoorBreakHardness = 5f;
            public float diggingProgressTick = 0.05f;
            public int maximumTargetHardness = 20;
 

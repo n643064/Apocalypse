@@ -3,11 +3,15 @@
   "id": "apocalypse",
   "version": "${version}",
   "name": "Apocalypse",
+  "contact": {
+    "homepage": "https://github.com/n643064/Apocalypse",
+    "sources": "https://github.com/n643064/Apocalypse",
+    "issues": "https://github.com/n643064/Apocalypse/issues"
+  },
   "description": "This mod significantly buffs zombies and allows them to break blocks, fully configurable via Cloth Config",
   "authors": [
     "n643064"
   ],
-  "contact": {},
   "license": "GPL-3.0",
   "icon": "assets/apocalypse/icon.png",
   "environment": "*",
@@ -29,5 +33,17 @@
     "fabricloader": ">=0.14.9",
     "fabric": "*",
     "minecraft": "1.19.*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "apocalypse",
+        "name": "Apocalypse",
+        "description": "This mod significantly buffs zombies and allows them to break blocks, fully configurable via Cloth Config",
+        "icon": "assets/apocalypse/icon.png",
+        "badges": []
+      },
+      "update_checker": false
+    }
   }
 }

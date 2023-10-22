@@ -44,7 +44,7 @@ public class ZombiePounceAtTargetGoal extends Goal
                     return false;
                 } else
                 {
-                    return this.mob.getRandom().nextInt(toGoalTicks(10)) == 0;
+                    return this.mob.getRandom().nextInt(Goal.toGoalTicks(10)) == 0;
                 }
             } else
             {

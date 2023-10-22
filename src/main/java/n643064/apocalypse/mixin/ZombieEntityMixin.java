@@ -23,8 +23,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Objects;
 import java.util.Optional;
 
-import static n643064.apocalypse.Apocalypse.IS_DIGGING;
-
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity
 {
@@ -37,6 +35,8 @@ public abstract class ZombieEntityMixin extends HostileEntity
     {
         super(entityType, world);
     }
+
+
 
     @SuppressWarnings("unchecked")
     @Redirect(method = "initGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;initCustomGoals()V"))
@@ -77,7 +77,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
                 {
                     continue;
                 }
-                Entity tmp = optionalEntityType.get().create(world);
+                Entity tmp = optionalEntityType.get().create(getWorld());
                 clazz = Objects.requireNonNull(tmp).getClass();
                 tmp.remove(RemovalReason.DISCARDED);
                 if (!LivingEntity.class.isAssignableFrom(clazz))
@@ -94,7 +94,7 @@ public abstract class ZombieEntityMixin extends HostileEntity
         ((MobNavigation) instance.getNavigation()).setAvoidSunlight(config.avoidSunlight);
         ((MobNavigation) instance.getNavigation()).setCanPathThroughDoors(config.pathThroughDoors);
 
-        this.dataTracker.startTracking(IS_DIGGING, false);
+        this.dataTracker.startTracking(Apocalypse.IS_DIGGING, false);
         if (config.enableDigging)
         {
             this.goalSelector.add(config.blockBreakPriority, new PrioritizedZombieBreakBlockGoal(config.blockBreakPriority, instance));
@@ -110,6 +110,8 @@ public abstract class ZombieEntityMixin extends HostileEntity
     {
         return Apocalypse.config.zombie.burnsInDaylight;
     }
+
+
 
     /**
      * @author me

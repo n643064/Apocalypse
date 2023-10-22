@@ -1,6 +1,5 @@
 package n643064.apocalypse.core.entity.goal;
 
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.mob.ZombieEntity;
 

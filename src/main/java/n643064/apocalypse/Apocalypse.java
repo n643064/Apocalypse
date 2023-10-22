@@ -71,6 +71,7 @@ public class Apocalypse implements ModInitializer
            public int revengePriority = 1;
            public String[] targets = new String[]{
                    "minecraft:player,2,false,false",
+                   "minecraft:villager,2,false,false",
                    "minecraft:wandering_trader,3,false,false",
                    "minecraft:iron_golem,3,false,false",
                    "minecraft:turtle,5,false,false",
@@ -88,7 +89,9 @@ public class Apocalypse implements ModInitializer
            public int blockBreakPriority = 2;
            public boolean dropBrokenBlocks = true;
            public boolean instantDoorBreak = true;
+           public boolean climbEachOther = true;
            public float instantDoorBreakHardness = 5f;
+           public float climbingVelocity = 0.2f;
            public float diggingProgressTick = 0.05f;
            public int maximumTargetHardness = 20;
 

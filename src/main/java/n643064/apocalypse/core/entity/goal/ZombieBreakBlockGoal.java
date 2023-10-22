@@ -5,6 +5,7 @@ import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.WorldUtil;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -60,17 +61,17 @@ public class ZombieBreakBlockGoal extends Goal
         mob.swingHand(Hand.MAIN_HAND);
         if (progress >= targetHardness)
         {
-            mob.world.breakBlock(this.target, config.dropBrokenBlocks);
+            mob.getWorld().breakBlock(this.target, config.dropBrokenBlocks);
             return;
         }
-        mob.world.setBlockBreakingInfo(mob.getId(), target, (int) (progress * ratio));
+        mob.getWorld().setBlockBreakingInfo(mob.getId(), target, (int) (progress * ratio));
 
     }
 
     @Override
     public void stop()
     {
-        mob.world.setBlockBreakingInfo(mob.getId(), target, 0);
+        mob.getWorld().setBlockBreakingInfo(mob.getId(), target, 0);
         progress = 0;
         target = null;
         targetHardness = 0;
@@ -84,7 +85,7 @@ public class ZombieBreakBlockGoal extends Goal
     public boolean canStart()
     {
         config = AutoConfig.getConfigHolder(Apocalypse.ApocalypseConfig.class).get().zombie;
-        final World world = mob.world;
+        final World world = mob.getWorld();
         final Direction direction = mob.getHorizontalFacing();
         BlockPos pos = mob.getBlockPos();
         Block b = world.getBlockState(pos).getBlock();
@@ -114,18 +115,20 @@ public class ZombieBreakBlockGoal extends Goal
         int mod;
         if (yDiff > 2)
         {
-            mod = targetEntity.getBlockY() > mob.getY() ? 1 : -1;
+            mod = targetEntity.getBlockY() > mob.getY() ? 1 : -2;
         } else
         {
             mod = -1;
         }
-        b = world.getBlockState(pos).getBlock();
+        BlockState state = world.getBlockState(pos);
+        b = state.getBlock();
 
-        if (b instanceof AirBlock || b.canMobSpawnInside())
+        if (b instanceof AirBlock || b.canMobSpawnInside(state))
         {
             pos = pos.add(0, mod, 0);
-            b = world.getBlockState(pos).getBlock();
-            if (b instanceof AirBlock || b.canMobSpawnInside())
+            state = world.getBlockState(pos);
+            b = state.getBlock();
+            if (b instanceof AirBlock || b.canMobSpawnInside(state))
             {
                 return false;
             }

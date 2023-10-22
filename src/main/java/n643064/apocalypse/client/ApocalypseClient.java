@@ -9,6 +9,7 @@ import n643064.apocalypse.Apocalypse;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.mob.ZombieEntity;
 
 import java.lang.reflect.Field;
 import java.util.List;

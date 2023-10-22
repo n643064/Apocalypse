@@ -90,8 +90,8 @@ public class Apocalypse implements ModInitializer
            public boolean dropBrokenBlocks = true;
            public boolean instantDoorBreak = true;
            public boolean climbEachOther = true;
-           public float instantDoorBreakHardness = 5f;
-           public float climbingVelocity = 0.2f;
+            public float climbingVelocity = 0.2f;
+            public float instantDoorBreakHardness = 5f;
            public float diggingProgressTick = 0.05f;
            public int maximumTargetHardness = 20;
 

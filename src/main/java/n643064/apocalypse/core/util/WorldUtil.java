@@ -1,4 +1,4 @@
-package n643064.apocalypse.core;
+package n643064.apocalypse.core.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -6,6 +6,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class WorldUtil
 {
+
     public static float blockPosDistance(Entity entity1, Entity entity2)
     {
         return blockPosDistance(entity1.getBlockPos(), entity2.getBlockPos());

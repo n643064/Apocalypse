@@ -11,6 +11,7 @@
   "license": "GPL-3.0",
   "icon": "assets/apocalypse/icon.png",
   "environment": "*",
+  "accessWidener": "apocalypse.accesswidener",
   "entrypoints": {
     "client": [
       "n643064.apocalypse.client.ApocalypseClient"

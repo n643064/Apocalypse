@@ -2,7 +2,7 @@ package n643064.apocalypse.core.entity.goal;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import n643064.apocalypse.Apocalypse;
-import n643064.apocalypse.core.WorldUtil;
+import n643064.apocalypse.core.util.WorldUtil;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

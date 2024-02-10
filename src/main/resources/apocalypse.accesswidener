@@ -1,0 +1,3 @@
+accessWidener v2 named
+accessible field net/minecraft/entity/EntityType factory Lnet/minecraft/entity/EntityType$EntityFactory;
+accessible method net/minecraft/entity/mob/ZombifiedPiglinEntity initCustomGoals ()V

@@ -3,14 +3,13 @@ package n643064.apocalypse.mixin;
 import n643064.apocalypse.Apocalypse;
 import n643064.apocalypse.core.entity.goal.PrioritizedZombieBreakBlockGoal;
 import n643064.apocalypse.core.entity.goal.ZombiePounceAtTargetGoal;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.MobNavigation;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -20,8 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Objects;
-import java.util.Optional;
+import static n643064.apocalypse.Apocalypse.ENTITY_LIST;
 
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity
@@ -36,13 +34,16 @@ public abstract class ZombieEntityMixin extends HostileEntity
         super(entityType, world);
     }
 
-
-
     @SuppressWarnings("unchecked")
     @Redirect(method = "initGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;initCustomGoals()V"))
     private void initCustomGoals(ZombieEntity instance)
     {
-        Apocalypse.ApocalypseConfig.Zombie config = Apocalypse.config.zombie;
+        final Apocalypse.ApocalypseConfig.Zombie config = Apocalypse.config.zombie;
+        if (!config.modifyPiglins && instance instanceof ZombifiedPiglinEntity piglin)
+        {
+            piglin.initCustomGoals();
+            return;
+        }
         this.goalSelector.add(2, new ZombieAttackGoal(instance, config.attackSpeed, false));
         this.goalSelector.add(6, new MoveThroughVillageGoal(instance, 1.0, false, 4, instance::canBreakDoors));
         this.goalSelector.add(7, new WanderAroundFarGoal(instance, 1.0));
@@ -50,7 +51,11 @@ public abstract class ZombieEntityMixin extends HostileEntity
         {
             if (config.groupRevengeEnabled)
             {
-                this.targetSelector.add(config.revengePriority, new RevengeGoal(this).setGroupRevenge());
+                if (config.modifyPiglins)
+                    this.targetSelector.add(config.revengePriority, new RevengeGoal(this).setGroupRevenge());
+                else
+                    this.targetSelector.add(config.revengePriority, new RevengeGoal(this).setGroupRevenge(ZombifiedPiglinEntity.class));
+
             } else
             {
                 this.targetSelector.add(config.revengePriority, new RevengeGoal(this));
@@ -62,33 +67,12 @@ public abstract class ZombieEntityMixin extends HostileEntity
             this.goalSelector.add(config.pouncePriority, new ZombiePounceAtTargetGoal(instance, config.pounceVelocity));
         }
 
-        for (String s : config.targets)
+        if (ENTITY_LIST == null)
+            Apocalypse.generateEntityList(getWorld());
+
+        for (Apocalypse.TargetedEntity e : ENTITY_LIST)
         {
-            String[] strings = s.split(",");
-            Class<? extends Entity> clazz;
-
-
-            if (strings[0].contains("player"))
-            {
-                clazz = PlayerEntity.class;
-            } else {
-                Optional<EntityType<?>> optionalEntityType = EntityType.get(strings[0]);
-                if (optionalEntityType.isEmpty())
-                {
-                    continue;
-                }
-                Entity tmp = optionalEntityType.get().create(getWorld());
-                clazz = Objects.requireNonNull(tmp).getClass();
-                tmp.remove(RemovalReason.DISCARDED);
-                if (!LivingEntity.class.isAssignableFrom(clazz))
-                {
-                    continue;
-                }
-            }
-            int priority = Integer.parseInt(strings[1]);
-            boolean vis = Boolean.parseBoolean(strings[2]);
-            boolean nav = Boolean.parseBoolean(strings[3]);
-            this.targetSelector.add(priority, new ActiveTargetGoal<>(instance, (Class<LivingEntity>) clazz, vis, nav));
+            this.targetSelector.add(e.priority(), new ActiveTargetGoal<>(instance, (Class<LivingEntity>) e.clazz(), e.visibility(), e.navigationCheck()));
         }
 
         ((MobNavigation) instance.getNavigation()).setAvoidSunlight(config.avoidSunlight);
@@ -111,16 +95,14 @@ public abstract class ZombieEntityMixin extends HostileEntity
         return Apocalypse.config.zombie.burnsInDaylight;
     }
 
-
-
     /**
-     * @author me
-     * @reason yes
+     * @author Wake up. Please.
+     * @reason If you're reading this, you've been in a coma for almost 20 years because of a car accident. We're trying a new technique. We don't know where this message will end up in your dream, but we hope we're getting through. Please wake up.
      */
     @Overwrite
     public boolean canBreakDoors()
     {
-        return false;
+        return !Apocalypse.config.zombie.enableDigging;
     }
 
 }

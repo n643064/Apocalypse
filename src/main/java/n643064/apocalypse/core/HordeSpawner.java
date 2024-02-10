@@ -16,12 +16,12 @@ public class HordeSpawner implements Spawner
     @Override
     public int spawn(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals)
     {
-        Apocalypse.ApocalypseConfig.Horde horde = Apocalypse.config.horde;
+        final Apocalypse.ApocalypseConfig.Horde horde = Apocalypse.config.horde;
         if (!spawnMonsters || !horde.enabled)
         {
             return 0;
         }
-        Random random = world.random;
+        final Random random = world.random;
         --this.cooldown;
         if (this.cooldown > 0)
         {

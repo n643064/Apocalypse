@@ -8,9 +8,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.spawner.Spawner;
+import net.minecraft.world.spawner.SpecialSpawner;
 
-public class HordeSpawner implements Spawner
+public class HordeSpawner implements SpecialSpawner
 {
     private int cooldown;
     @Override

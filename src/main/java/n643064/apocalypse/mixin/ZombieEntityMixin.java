@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.MobNavigation;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
@@ -17,7 +18,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static n643064.apocalypse.Apocalypse.ENTITY_LIST;
 
@@ -78,11 +81,15 @@ public abstract class ZombieEntityMixin extends HostileEntity
         ((MobNavigation) instance.getNavigation()).setAvoidSunlight(config.avoidSunlight);
         ((MobNavigation) instance.getNavigation()).setCanPathThroughDoors(config.pathThroughDoors);
 
-        this.dataTracker.startTracking(Apocalypse.IS_DIGGING, false);
         if (config.enableDigging)
         {
             this.goalSelector.add(config.blockBreakPriority, new PrioritizedZombieBreakBlockGoal(config.blockBreakPriority, instance));
         }
+    }
+    
+    @Inject(method = "initDataTracker", at = @At("TAIL"))
+    protected void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(Apocalypse.IS_DIGGING, false);
     }
 
     /**

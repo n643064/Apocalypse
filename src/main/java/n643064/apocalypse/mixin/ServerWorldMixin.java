@@ -9,7 +9,7 @@ import net.minecraft.util.math.random.RandomSequencesState;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
-import net.minecraft.world.spawner.Spawner;
+import net.minecraft.world.spawner.SpecialSpawner;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -26,12 +26,12 @@ import java.util.concurrent.Executor;
 public class ServerWorldMixin
 {
     @Mutable
-    @Shadow @Final private List<Spawner> spawners;
+    @Shadow @Final private List<SpecialSpawner> spawners;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void init(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci)
     {
-        ArrayList<Spawner> spawners2 = new ArrayList<>(this.spawners);
+        ArrayList<SpecialSpawner> spawners2 = new ArrayList<>(this.spawners);
         spawners2.add(new HordeSpawner());
         this.spawners = spawners2.stream().toList();
     }

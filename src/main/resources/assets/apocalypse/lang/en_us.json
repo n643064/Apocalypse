@@ -33,5 +33,5 @@
   "text.autoconfig.apocalypse.option.zombie.instantDoorBreakHardness": "Maximal hardness of instantly broken doors",
   "text.autoconfig.apocalypse.option.zombie.diggingProgressTick": "Breaking progress per tick",
   "text.autoconfig.apocalypse.option.zombie.maximumTargetHardness": "Maximal target block hardness",
-  "text.autoconfig.apocalypse.option.zombie.modifyPiglins": "Maximal target block hardness"
+  "text.autoconfig.apocalypse.option.zombie.modifyPiglins": "Modify Zombified Piglins"
 }
